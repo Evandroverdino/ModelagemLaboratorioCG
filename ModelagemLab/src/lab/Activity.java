@@ -68,6 +68,7 @@ public class Activity implements GLEventListener, KeyListener {
 	private int HEIGHT = 600;
 
 	int texture;
+	int textureFloor;
 	int textureWall;
 	int textureTable;
 	int textureDoor;
@@ -97,6 +98,9 @@ public class Activity implements GLEventListener, KeyListener {
 	int textureArFrente2;
 	int textureChair;
 	int textureChair2;
+	
+	int textureJanelaLado;
+	int textureJanelaEmPe;
 
 	public void carregar_texturas(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
@@ -193,6 +197,20 @@ public class Activity implements GLEventListener, KeyListener {
 			Texture text27 = TextureIO.newTexture(new File(getClass().getResource("/img/cadeira2.jpg").getPath()),
 					true);
 			textureChair2 = text27.getTextureObject(gl);
+			
+			Texture text28 = TextureIO.newTexture(new File(getClass().getResource("/img/piso3.jpg").getPath()),
+					true);
+			textureFloor = text28.getTextureObject(gl);
+			
+			Texture text29 = TextureIO.newTexture(new File(getClass().getResource("/img/janelaLado.png").getPath()),
+					true);
+			textureJanelaLado = text29.getTextureObject(gl);
+			
+			Texture text30 = TextureIO.newTexture(new File(getClass().getResource("/img/janelaEmPe.png").getPath()),
+					true);
+			textureJanelaEmPe = text30.getTextureObject(gl);
+			
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -211,11 +229,25 @@ public class Activity implements GLEventListener, KeyListener {
 		gl.glRotated(rotateX, 1, 0, 0);
 		gl.glRotated(rotateY, 0, 1, 0);
 		gl.glRotated(rotateZ, 0, 0, 1);
+//
+//		gl.glScalef(lenght, height, width);
+//		glut.glutSolidCube(1f);
+//		gl.glScalef(0, 0, 0);
+
 		gl.glTranslatef(z, -y, x);
+
+		// ---------Textura------
+
 		gl.glEnable(GL2.GL_TEXTURE_2D);
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, texture);
+		gl.glColor3f(1f, 1f, 1f);
+//		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR_MIPMAP_NEAREST);
+//		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR_MIPMAP_LINEAR);
+//		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_REPEAT);
+//		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_REPEAT);
+//		
 		gl.glBegin(GL2.GL_QUADS);
-		gl.glDisable(GL2.GL_TEXTURE_2D);
+
 		x = -x;
 		z = -z;
 
@@ -302,8 +334,31 @@ public class Activity implements GLEventListener, KeyListener {
 		gl.glTexCoord2f(0.0f, 1.0f);
 		gl.glVertex3f(-lenght / 2 + z, height / 2 + y, -width / 2 + x);// direita
 																		// cima
-
+		gl.glDisable(GL2.GL_TEXTURE_2D);
 		gl.glEnd();
+		gl.glPopMatrix();
+		gl.glFlush();
+	}
+	
+	private void createCube2(GLAutoDrawable drawable, int texture, float width, float height, float lenght, float x,
+			float y, float z, float rotateX, float rotateY, float rotateZ) {
+
+		GL2 gl = drawable.getGL().getGL2();
+
+		gl.glPushMatrix();
+
+		gl.glTranslatef(-z, y, -x);
+		gl.glRotated(rotateX, 1, 0, 0);
+		gl.glRotated(rotateY, 0, 1, 0);
+		gl.glRotated(rotateZ, 0, 0, 1);
+
+		gl.glScalef(lenght, height, width);
+		gl.glColor3f(0.6f, 0.6f, 0.6f);
+		glut.glutSolidCube(1f);
+		gl.glScalef(0, 0, 0);
+
+		gl.glTranslatef(z, -y, x);
+	
 		gl.glPopMatrix();
 		gl.glFlush();
 	}
@@ -401,14 +456,47 @@ public class Activity implements GLEventListener, KeyListener {
 
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
-		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		// gl.glClearColor(0f, 0f, 0f, 0f);
+		// gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 		aimCamera(gl, glu);
 		moveCamera();
 
+//		gl.glPushMatrix();
+//		gl.glTranslated(0, 1, 0);
+//		gl.glColor3f(1f, 1f, 1f);
+//		glut.glutSolidSphere(0.5f, 20, 20);
+//		gl.glPopMatrix();
+//
+//		gl.glPushMatrix();
+//		gl.glTranslated(-8f, 0.2f, 4f);
+//		gl.glTranslated(0, 1, 0);
+//		gl.glColor3f(1f, 1f, 1f);
+//		glut.glutSolidSphere(0.5f, 20, 20);
+//		gl.glPopMatrix();
+//
+//		gl.glPushMatrix();
+//		gl.glTranslated(-3.5f, 2f, 7.5f);
+//		gl.glColor3f(1f, 1f, 1f);
+//		glut.glutSolidSphere(0.03f, 20, 20);
+//		gl.glPopMatrix();
+//
+//		gl.glPushMatrix();
+//		gl.glTranslated(-3.5f, 2f, 5.2f);
+//		gl.glColor3f(1f, 1f, 1f);
+//		glut.glutSolidSphere(0.03f, 20, 20);
+//		gl.glPopMatrix();
+//
+//		gl.glPushMatrix();
+//		gl.glTranslated(-3.5f, 2f, 3.2f);
+//		gl.glColor3f(1f, 1f, 1f);
+//		glut.glutSolidSphere(0.03f, 20, 20);
+//		gl.glPopMatrix();
+
 		createCorredor(drawable);
 		createLab(drawable);
+
+		// Iluminação
+		init_lighting(gl);
 
 		gl.glFlush();
 
@@ -429,7 +517,53 @@ public class Activity implements GLEventListener, KeyListener {
 		carregar_texturas(drawable);
 		gl.glEnable(GL2.GL_DEPTH_TEST);
 
+	}
+
+	public void init_lighting(GL2 gl) {
+
+		float luzAmbiente[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+		float luzDifusa[] = { 0.7f, 0.7f, 0.7f, 1.0f }; // "cor"
+		float luzEspecular[] = { 1.0f, 1.0f, 1.0f, 1.0f };// "brilho"
+		float posicaoLuz[] = { -3.5f, 2f, 7.5f, 1.0f };
+		//float posicaoLuz2[] = { -3.5f, 2f, 5.2f, 1.0f };
+		float posicaoLuz3[] = { -3.5f, 2f, 3.2f, 1.0f };
+		float especularidade[] = { 1, 1, 1, 1 };
+		int especMaterial = 60;
+
+		// Habilita o uso de iluminação
+		gl.glShadeModel(GL2.GL_SMOOTH);
 		gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+		// Define a refletância do material
+		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, especularidade, 1);
+		// Define a concentração do brilho
+		gl.glMateriali(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, especMaterial);
+		// gl.glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, GL2.GL_TRUE);
+
+		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, posicaoLuz, 0);
+		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, luzAmbiente, 0);
+		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, luzDifusa, 0);
+		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, luzEspecular, 0);
+
+//		gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_POSITION, posicaoLuz2, 0);
+//		gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_AMBIENT, luzAmbiente, 0);	
+//		gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_DIFFUSE, luzDifusa, 0);
+//		gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_SPECULAR, luzEspecular, 0);
+
+		gl.glLightfv(GL2.GL_LIGHT3, GL2.GL_POSITION, posicaoLuz3, 0);
+		gl.glLightfv(GL2.GL_LIGHT3, GL2.GL_AMBIENT, luzAmbiente, 0);
+		gl.glLightfv(GL2.GL_LIGHT3, GL2.GL_DIFFUSE, luzDifusa, 0);
+		gl.glLightfv(GL2.GL_LIGHT3, GL2.GL_SPECULAR, luzEspecular, 0);
+
+		gl.glEnable(GL2.GL_COLOR_MATERIAL);
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT1);
+		//gl.glEnable(GL2.GL_LIGHT2);
+		gl.glEnable(GL2.GL_LIGHT3);
+
+		// Reflexo vidro
+		gl.glEnable(GL2.GL_BLEND);
+		gl.glEnable(GL2.GL_NORMALIZE);
+		gl.glEnable(GL2.GL_DEPTH_TEST);
 
 	}
 
@@ -472,11 +606,11 @@ public class Activity implements GLEventListener, KeyListener {
 		}
 
 		if (event.getKeyCode() == KeyEvent.VK_I) {
-			cameraSpeed = 0.05F;
+			cameraSpeed = 0.1F;
 		}
 
 		if (event.getKeyCode() == KeyEvent.VK_O) {
-			cameraSpeed = -0.05F;
+			cameraSpeed = -0.1F;
 		}
 
 		if (event.getKeyCode() == KeyEvent.VK_D) {
@@ -518,7 +652,16 @@ public class Activity implements GLEventListener, KeyListener {
 		createCube(drawable, textureRoof, 8f, 0.2f, 3.5f, -5f, 2.11f, 3.6f, 0, 0, 0);
 
 		// Parede lab fundo
-		createCube(drawable, textureWindow2, 0.2f, 2f, 3.5f, -9f, 1, 3.6f, 0, 0, 0);
+		// createCube(drawable, textureWindow2, 0.2f, 2f, 3.5f, -9f, 1, 3.6f, 0,
+		// 0, 0);
+		createCube(drawable, textureWall, 0.2f, 1f, 3.5f, -9f, 0.5f, 3.6f, 0, 0, 0);//meia parede
+		createCube(drawable, textureWall, 0.3f, 2f, 0.25f, -8.8f, 1f, 2f, 0, 0, 0);//Borda Parede
+		createCube(drawable, textureJanelaLado, 0.051f, 0.08f, 3.5f, -9f, 1.65f, 3.6f, 0, 0, 0);//Janela deitada
+		createCube(drawable, textureJanelaEmPe, 0.05f, 2f, 0.06f, -9f, 1.1f, 2.7f, 0, 0, 0);//Janela em pé
+		createCube(drawable, textureJanelaEmPe, 0.05f, 2f, 0.06f, -9f, 1.1f, 3.2f, 0, 0, 0);
+		createCube(drawable, textureJanelaEmPe, 0.05f, 2f, 0.06f, -9f, 1.1f, 3.7f, 0, 0, 0);
+		createCube(drawable, textureJanelaEmPe, 0.05f, 2f, 0.06f, -9f, 1.1f, 4.2f, 0, 0, 0);
+		createCube(drawable, textureJanelaEmPe, 0.05f, 2f, 0.06f, -9f, 1.1f, 4.7f, 0, 0, 0);
 
 		// Parede lab esq
 		createCube(drawable, textureWall, 7, 2, 0.2f, -5.5f, 1, 1.83f, 0, 0, 0);
@@ -542,6 +685,7 @@ public class Activity implements GLEventListener, KeyListener {
 
 		GL2 gl = drawable.getGL().getGL2();
 
+		gl.glPushMatrix();
 		// ---------------------Cadeira 1---------------------------------
 
 		// Costas
@@ -584,7 +728,9 @@ public class Activity implements GLEventListener, KeyListener {
 		gl.glTranslated(3.707f, -0.142f, -3.635f);
 
 		gl.glColor3f(1, 1, 1);
+		gl.glPopMatrix();
 
+		gl.glPushMatrix();
 		// ---------------------Cadeira 2---------------------------------
 
 		// Costas
@@ -626,50 +772,51 @@ public class Activity implements GLEventListener, KeyListener {
 		gl.glTranslated(4.707f, -0.142f, -5.135f);
 
 		gl.glColor3f(1, 1, 1);
-		
-		
+		gl.glPopMatrix();
+
+		gl.glPushMatrix();
 		// ---------------------Cadeira 3---------------------------------
 
-				// Costas
-				createCylinder(drawable, textureChair, 0.18f, 0.18f, 0.04f, -6.27f, 0.61f, 4.25f, 90, 0, 0);
-				createCylinder(drawable, textureChair, 0.18f, 0.18f, 0.04f, -6.27f, 0.61f, 4.25f, 0, 0, 0);
-				// sentar
-				createCylinder(drawable, textureChair, 0.21f, 0.18f, 0.04f, -6.27f, 0.35f, 4.505f, 0, 0, 90);
-				createCylinder(drawable, textureChair, 0.21f, 0.18f, 0.04f, -6.27f, 0.35f, 4.505f, 0, 90, 90);
-				// Apoio
-				createCylinder(drawable, textureChair2, 0.03f, 0.18f, 0.03f, -6.27f, 0.48f, 4.21f, 0, 0, 0);
-				createCylinder(drawable, textureChair2, 0.03f, 0.18f, 0.03f, -6.27f, 0.326f, 4.365f, 0, 0, 90);
-				// Pés Centro
-				createCylinder(drawable, textureChair2, 0.03f, 0.08f, 0.03f, -6.27f, 0.23f, 4.52f, 0, 0, 0);
-				// Pés
-				createCylinder(drawable, textureChair2, 0.025f, 0.125f, 0.025f, -6.27f, 0.15f, 4.42f, 0, 0, 90);
-				createCylinder(drawable, textureChair2, 0.025f, 0.125f, 0.025f, -6.15f, 0.15f, 4.49f, 0, 72, 90);
-				createCylinder(drawable, textureChair2, 0.025f, 0.125f, 0.025f, -6.2f, 0.15f, 4.61f, 0, 144, 90);
-				createCylinder(drawable, textureChair2, 0.025f, 0.125f, 0.025f, -6.345f, 0.15f, 4.61f, 0, 216, 90);
-				createCylinder(drawable, textureChair2, 0.025f, 0.125f, 0.025f, -6.385f, 0.15f, 4.485f, 0, 288, 90);
+		// Costas
+		createCylinder(drawable, textureChair, 0.18f, 0.18f, 0.04f, -6.27f, 0.61f, 4.25f, 90, 0, 0);
+		createCylinder(drawable, textureChair, 0.18f, 0.18f, 0.04f, -6.27f, 0.61f, 4.25f, 0, 0, 0);
+		// sentar
+		createCylinder(drawable, textureChair, 0.21f, 0.18f, 0.04f, -6.27f, 0.35f, 4.505f, 0, 0, 90);
+		createCylinder(drawable, textureChair, 0.21f, 0.18f, 0.04f, -6.27f, 0.35f, 4.505f, 0, 90, 90);
+		// Apoio
+		createCylinder(drawable, textureChair2, 0.03f, 0.18f, 0.03f, -6.27f, 0.48f, 4.21f, 0, 0, 0);
+		createCylinder(drawable, textureChair2, 0.03f, 0.18f, 0.03f, -6.27f, 0.326f, 4.365f, 0, 0, 90);
+		// Pés Centro
+		createCylinder(drawable, textureChair2, 0.03f, 0.08f, 0.03f, -6.27f, 0.23f, 4.52f, 0, 0, 0);
+		// Pés
+		createCylinder(drawable, textureChair2, 0.025f, 0.125f, 0.025f, -6.27f, 0.15f, 4.42f, 0, 0, 90);
+		createCylinder(drawable, textureChair2, 0.025f, 0.125f, 0.025f, -6.15f, 0.15f, 4.49f, 0, 72, 90);
+		createCylinder(drawable, textureChair2, 0.025f, 0.125f, 0.025f, -6.2f, 0.15f, 4.61f, 0, 144, 90);
+		createCylinder(drawable, textureChair2, 0.025f, 0.125f, 0.025f, -6.345f, 0.15f, 4.61f, 0, 216, 90);
+		createCylinder(drawable, textureChair2, 0.025f, 0.125f, 0.025f, -6.385f, 0.15f, 4.485f, 0, 288, 90);
 
-				// Rodinhas
-				gl.glColor3f(0, 0, 0);
+		// Rodinhas
+		gl.glColor3f(0, 0, 0);
 
-				gl.glTranslated(-4.29f, 0.142f, 6.27);
-				glut.glutSolidSphere(0.032, 50, 50);
+		gl.glTranslated(-4.29f, 0.142f, 6.27);
+		glut.glutSolidSphere(0.032, 50, 50);
 
-				gl.glTranslated(-0.42, 0f, 0.145f);
-				glut.glutSolidSphere(0.032, 50, 50);
+		gl.glTranslated(-0.42, 0f, 0.145f);
+		glut.glutSolidSphere(0.032, 50, 50);
 
-				gl.glTranslated(0.265f, 0f, 0.09f);
-				glut.glutSolidSphere(0.032, 50, 50);
+		gl.glTranslated(0.265f, 0f, 0.09f);
+		glut.glutSolidSphere(0.032, 50, 50);
 
-				gl.glTranslated(-0.012, 0f, -0.47f);
-				glut.glutSolidSphere(0.032, 50, 50);
+		gl.glTranslated(-0.012, 0f, -0.47f);
+		glut.glutSolidSphere(0.032, 50, 50);
 
-				gl.glTranslated(-0.25, 0f, 0.1f);
-				glut.glutSolidSphere(0.032, 50, 50);
+		gl.glTranslated(-0.25, 0f, 0.1f);
+		glut.glutSolidSphere(0.032, 50, 50);
 
-				gl.glTranslated(4.707f, -0.142f, -6.135f);
+		gl.glTranslated(4.707f, -0.142f, -6.135f);
 
-				gl.glColor3f(1, 1, 1);
-
+		gl.glColor3f(1, 1, 1);
+		gl.glPopMatrix();
 	}
 
 	private void createCylinder(GLAutoDrawable drawable, int texture, float width, float height, float lenght, float x,
@@ -700,17 +847,19 @@ public class Activity implements GLEventListener, KeyListener {
 	}
 
 	private void createTable(GLAutoDrawable drawable) {
+		
+		
 		// mesa lab maior
-		createCube(drawable, textureTable, 5.7f, 0.06f, 1, -6.1f, 0.52f, 4.8f, 0, 0, 0);
+		createCube2(drawable, textureTable, 5.7f, 0.06f, 1, -6.1f, 0.52f, 4.8f, 0, 0, 0);
 		// mesa apoio
-		createCube(drawable, textureTable, 0.1f, 0.45f, 1, -7f, 0.27f, 4.8f, 0, 0, 0);
-		createCube(drawable, textureTable, 0.1f, 0.45f, 1, -5.8f, 0.27f, 4.8f, 0, 0, 0);
-		createCube(drawable, textureTable, 0.1f, 0.45f, 1, -4.6f, 0.27f, 4.8f, 0, 0, 0);
-		createCube(drawable, textureTable, 0.1f, 0.45f, 1, -3.3f, 0.27f, 4.8f, 0, 0, 0);
+		createCube2(drawable, textureTable, 0.1f, 0.45f, 1, -7f, 0.27f, 4.8f, 0, 0, 0);
+		createCube2(drawable, textureTable, 0.1f, 0.45f, 1, -5.8f, 0.27f, 4.8f, 0, 0, 0);
+		createCube2(drawable, textureTable, 0.1f, 0.45f, 1, -4.6f, 0.27f, 4.8f, 0, 0, 0);
+		createCube2(drawable, textureTable, 0.1f, 0.45f, 1, -3.3f, 0.27f, 4.8f, 0, 0, 0);
 		// mesa lab fundo
-		createCube(drawable, textureTable, 1f, 0.06f, 2.6f, -8.5f, 0.52f, 3.2f, 0, 0, 0);
+		createCube2(drawable, textureTable, 1f, 0.06f, 2.6f, -8.5f, 0.519f, 3.2f, 0, 0, 0);
 		// mesa apoio
-		createCube(drawable, textureTable, 1f, 0.45f, 0.1f, -8.5f, 0.27f, 3.3f, 0, 0, 0);
+		createCube2(drawable, textureTable, 1f, 0.45f, 0.1f, -8.5f, 0.27f, 3.3f, 0, 0, 0);
 
 	}
 
@@ -750,8 +899,8 @@ public class Activity implements GLEventListener, KeyListener {
 		createCube(drawable, texturePC, 0.12f, 0.3f, 0.12f, -8.5f, 0.65f, 2.6f, 0, 0, 0);
 		createCube(drawable, texturePC, 0.35f, 0.02f, 0.5f, -8.5f, 0.55f, 2.6f, 0, 0, 0);
 		createCube(drawable, textureKeyboard, 0.19f, 0.02f, 0.5f, -8.15f, 0.55f, 2.6f, 0, 0, 0);
-		createCube(drawable, texturePC, 0.37f, 0.6f, 0.2f, -8.5f, 0.8f, 2.2f, 0, 0, 0);
-		createCube(drawable, texturePCGabinete2, 0.369f, 0.59f, 0.19f, -8.49f, 0.8f, 2.2f, 0, 0, 0);
+		createCube(drawable, texturePC, 0.37f, 0.6f, 0.2f, -8.4f, 0.8f, 2.2f, 0, 0, 0);
+		createCube(drawable, texturePCGabinete2, 0.369f, 0.59f, 0.19f, -8.39f, 0.8f, 2.2f, 0, 0, 0);
 
 		// Ar condicionado
 		createAr(drawable, 1.05f, 0.25f, 0.15f, -6.4f, 1.7f, 2f);
@@ -767,17 +916,19 @@ public class Activity implements GLEventListener, KeyListener {
 		gl.glTranslatef(5.2f, -0.5f, -2f);
 		// porta
 		createCube(drawable, textureDoor, 0.10f, 1.43f, 0.75f, -2f, 0.72f, 4.82f, 0, 0, 0);
+		gl.glPopMatrix();
 		// porta vidro
 		gl.glEnable(GL2.GL_BLEND);
-		gl.glColor4f(1, 1, 1, 0.25f);
-		createCube(drawable, textureTable, 0.05f, 0.56f, 0.8f, -2f, 1.7f, 4.8f, 0, 0, 0);
+		gl.glColor4f(1, 1, 1, 0.2f);
+		createCube2(drawable, textureTable, 0.05f, 0.56f, 0.8f, -2f, 1.75f, 4.8f, 0, 0, 0);
 		gl.glDisable(GL2.GL_BLEND);
 		// porta vidro cima
 		createCube(drawable, textureTable, 0.10f, 0.07f, 0.75f, -2f, 1.95f, 4.82f, 0, 0, 0);
+		// porta vidro baixo
+		createCube(drawable, textureTable, 0.10f, 0.07f, 0.75f, -2f, 1.47f, 4.82f, 0, 0, 0);
 		// porta vidro lados
 		createCube(drawable, textureTable, 0.10f, 0.5f, 0.07f, -2f, 1.68f, 4.486f, 0, 0, 0);
 		createCube(drawable, textureTable, 0.10f, 0.5f, 0.07f, -2f, 1.68f, 5.17f, 0, 0, 0);
-		gl.glPopMatrix();
 
 	}
 
@@ -938,7 +1089,7 @@ public class Activity implements GLEventListener, KeyListener {
 
 	private void createCorredor(GLAutoDrawable drawable) {
 		// chao do corredor
-		createCube(drawable, texture, 3, 0.2f, 18, -0.5f, 0, 0, 0, 0, 0);
+		createCube(drawable, textureFloor, 3, 0.2f, 18, -0.5f, 0, 0, 0, 0, 0);
 
 		// Criar Teto
 		createCube(drawable, textureRoof2, 3, 0.2f, 18, -0.5f, 2.1f, 0, 0, 0, 0);
