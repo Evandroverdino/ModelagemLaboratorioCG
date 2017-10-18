@@ -44,6 +44,8 @@ public class LabTexture {
 
 	private int textureWindowLado;
 	private int textureWindowEmPe;
+	
+	private int textureCup;
 
 	public LabTexture(GL2 gl) {
 		try {
@@ -137,6 +139,9 @@ public class LabTexture {
 
 			texture = TextureIO.newTexture(new File(getClass().getResource("/img/janelaEmPe.png").getPath()), true);
 			textureWindowEmPe = texture.getTextureObject(gl);
+			
+			texture = TextureIO.newTexture(new File(getClass().getResource("/img/integralle.jpg").getPath()), true);
+			textureCup = texture.getTextureObject(gl);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -261,6 +266,10 @@ public class LabTexture {
 
 	public int getTextureWindowEmPe() {
 		return textureWindowEmPe;
+	}
+
+	public int getTextureCup() {
+		return textureCup;
 	}
 
 }

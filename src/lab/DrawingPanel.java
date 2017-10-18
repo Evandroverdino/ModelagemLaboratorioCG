@@ -143,7 +143,6 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 	@Override
 	public void init(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
-
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		loadTextures(drawable);
 		gl.glEnable(GL2.GL_DEPTH_TEST);
@@ -352,7 +351,7 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		gl.glEnable(GL2.GL_TEXTURE_2D);
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, texture);
 		gl.glColor3f(1f, 1f, 1f);
-	
+
 		gl.glBegin(GL2.GL_QUADS);
 
 		x = -x;
@@ -383,7 +382,7 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 																		// Cima
 		gl.glTexCoord2f(0.0f, 0.0f);
 		gl.glVertex3f(lenght / 2 + z, -height / 2 + y, -width / 2 + x);// atras
-																	// baixo
+																		// baixo
 		// Top Face
 		gl.glTexCoord2f(0.0f, 1.0f);
 		gl.glVertex3f(-lenght / 2 + z, height / 2 + y, -width / 2 + x);// direita
@@ -693,6 +692,9 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 
 		// Ar condicionado
 		createAr(drawable, 1.05f, 0.25f, 0.15f, -6.4f, 1.7f, 2f);
+
+		// Copo
+		createCup(drawable, labTexture.getTextureCup(), 0.02f, 0.05f, 0.02f, -4.2f, 0.63f, 4.6f, 0, 0, 0);
 	}
 
 	private void createDoor(GLAutoDrawable drawable) {
@@ -871,4 +873,30 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 
 		gl.glFlush();
 	}
+
+	private void createCup(GLAutoDrawable drawable, int texture, float width, float height, float lenght, float x,
+			float y, float z, float rotateX, float rotateY, float rotateZ) {
+		GL2 gl = drawable.getGL().getGL2();
+
+		gl.glPushMatrix();
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, texture);
+		
+		gl.glTranslatef(-z, y, -x);
+		gl.glRotated(rotateX, 1, 0, 0);
+		gl.glRotated(rotateY, 0, 1, 0);
+		gl.glRotated(rotateZ, 0, 0, 1);
+		gl.glScalef(lenght, height, width);
+		gl.glBegin(GL2.GL_QUAD_STRIP);		
+		for (int j = 0; j <= 360; j += DEF_D) {
+			gl.glTexCoord2f(1f, 0f);
+			gl.glVertex3f((float) (Math.cos(j)), +1, (float) (Math.sin(j)));
+			gl.glTexCoord2f(0.0f, 1.0f);
+			gl.glVertex3f((float) (Math.cos(j)), -1, (float) (Math.sin(j)));
+		}
+		gl.glEnd();
+
+		gl.glPopMatrix();
+		gl.glFlush();
+	}
+
 }
