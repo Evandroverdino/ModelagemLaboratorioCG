@@ -22,10 +22,11 @@ public class Launcher {
 
 		DrawingPanel drawingPanel = new DrawingPanel();
 
+		final Dimension minDimension = new Dimension(1024,  800);
 		final GLCanvas glcanvas = new GLCanvas(capabilities);
 		glcanvas.addGLEventListener(drawingPanel);
 		glcanvas.addKeyListener(drawingPanel);
-		glcanvas.setSize(1024, 800);
+		glcanvas.setSize(minDimension);
 
 		final FPSAnimator animator = new FPSAnimator(glcanvas, 60, true);
 
@@ -40,6 +41,7 @@ public class Launcher {
 			}
 		});
 		frame.setSize(frame.getContentPane().getPreferredSize());
+		frame.setMinimumSize(minDimension);
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int windowX = Math.max(0, (screenSize.width - frame.getWidth()) / 2);

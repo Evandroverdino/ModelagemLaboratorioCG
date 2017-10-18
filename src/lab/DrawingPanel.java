@@ -14,6 +14,7 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 	private static final float PI = 3.1415f;
 	private static int shoulder = 0;
 	private int DEF_D = 5;
+	private float luzAmbiente[] = { 1f, 1f, 1f, 1f };
 
 	private GLUT glut = new GLUT();
 	private GLU glu = new GLU();
@@ -33,10 +34,20 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 	public void moveCamera() {
 		float[] tmp = polarToCartesian(cameraAzimuth, cameraSpeed, cameraElevation);
 
+		final int cameraCoordsPosx = (int) ((this.cameraCoordsPosx + tmp[0]) * 10);
+		final int cameraCoordsPosy = (int) ((this.cameraCoordsPosy + tmp[1]) * 10);
+		final int cameraCoordsPosz = (int) ((this.cameraCoordsPosz + tmp[2]) * 10);
+		if (cameraCoordsPosx < -86 || cameraCoordsPosx > 85 || cameraCoordsPosy < 3 || cameraCoordsPosy > 18
+				|| cameraCoordsPosz < -5 || cameraCoordsPosz > 86) {
+			return;
+		} else if (cameraCoordsPosz > 16 && (cameraCoordsPosx > -22 || cameraCoordsPosx < -49)) {
+			return;
+		}
+
 		// Replace old x, y, z coords for camera
-		cameraCoordsPosx += tmp[0];
-		cameraCoordsPosy += tmp[1];
-		cameraCoordsPosz += tmp[2];
+		this.cameraCoordsPosx += tmp[0];
+		this.cameraCoordsPosy += tmp[1];
+		this.cameraCoordsPosz += tmp[2];
 	}
 
 	public void aimCamera(GL2 gl, GLU glu) {
@@ -118,7 +129,7 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		createHall(drawable);
 		createLab(drawable);
 
-		// Iluminação
+		// Iluminaï¿½ï¿½o
 		init_lighting(gl);
 
 		gl.glFlush();
@@ -179,6 +190,16 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 			cameraSpeed = -0.1F;
 		}
 
+		if (event.getKeyCode() == KeyEvent.VK_L) {
+			for (int i = 0; i < luzAmbiente.length; i++)
+				luzAmbiente[i] = 1;
+		}
+
+		if (event.getKeyCode() == KeyEvent.VK_K) {
+			for (int i = 0; i < luzAmbiente.length; i++)
+				luzAmbiente[i] = 0;
+		}
+
 		if (event.getKeyCode() == KeyEvent.VK_D) {
 			if (shoulder >= 85) {
 				return;
@@ -209,51 +230,35 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 			cameraSpeed = 0;
 		}
 	}
-	
+
 	public void loadTextures(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
 		labTexture = new LabTexture(gl);
 	}
-	
-	public void init_lighting(GL2 gl) {
-		float luzAmbiente[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-		float luzDifusa[] = { 0.7f, 0.7f, 0.7f, 1.0f }; // "cor"
-		float luzEspecular[] = { 1.0f, 1.0f, 1.0f, 1.0f };// "brilho"
-		float posicaoLuz[] = { -3.5f, 2f, 7.5f, 1.0f };
-		// float posicaoLuz2[] = { -3.5f, 2f, 5.2f, 1.0f };
-		float posicaoLuz3[] = { -3.5f, 2f, 3.2f, 1.0f };
-		float especularidade[] = { 1, 1, 1, 1 };
-		int especMaterial = 60;
 
-		// Habilita o uso de iluminação
+	public void init_lighting(GL2 gl) {
+		float luzDifusa[] = { 1.0f, 1.0f, 1.0f, 1.0f }; // "cor"
+		float luzEspecular[] = { 1.0f, 1.0f, 1.0f, 1.0f };// "brilho"
+		float posicaoLuz[] = { -3.27f, -4f, 7.5f, 1.0f };
+		float especularidade[] = { 10, 10, 10, 10 };
+		int especMaterial = 6000;
+
+		// Habilita o uso de iluminaï¿½ï¿½o
 		gl.glShadeModel(GL2.GL_SMOOTH);
 		gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
-		// Define a refletância do material
+		// Define a refletï¿½ncia do material
 		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, especularidade, 1);
-		// Define a concentração do brilho
+		// Define a concentraï¿½ï¿½o do brilho
 		gl.glMateriali(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, especMaterial);
-		// gl.glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, GL2.GL_TRUE);
 
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, posicaoLuz, 0);
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, luzAmbiente, 0);
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, luzDifusa, 0);
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, luzEspecular, 0);
 
-		// gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_POSITION, posicaoLuz2, 0);
-		// gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_AMBIENT, luzAmbiente, 0);
-		// gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_DIFFUSE, luzDifusa, 0);
-		// gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_SPECULAR, luzEspecular, 0);
-
-		gl.glLightfv(GL2.GL_LIGHT3, GL2.GL_POSITION, posicaoLuz3, 0);
-		gl.glLightfv(GL2.GL_LIGHT3, GL2.GL_AMBIENT, luzAmbiente, 0);
-		gl.glLightfv(GL2.GL_LIGHT3, GL2.GL_DIFFUSE, luzDifusa, 0);
-		gl.glLightfv(GL2.GL_LIGHT3, GL2.GL_SPECULAR, luzEspecular, 0);
-
 		gl.glEnable(GL2.GL_COLOR_MATERIAL);
 		gl.glEnable(GL2.GL_LIGHTING);
 		gl.glEnable(GL2.GL_LIGHT1);
-		// gl.glEnable(GL2.GL_LIGHT2);
-		gl.glEnable(GL2.GL_LIGHT3);
 
 		// Reflexo vidro
 		gl.glEnable(GL2.GL_BLEND);
@@ -293,7 +298,7 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		// Frente
 		createCube(drawable, labTexture.getTextureWall(), 3f, 2, 0.2f, -0.5f, 1, -8.8f, 0, 0, 0);
 	}
-	
+
 	private void createLab(GLAutoDrawable drawable) {
 		// chao do laboratorio
 		createCube(drawable, labTexture.getTextureMain(), 8f, 0.2f, 3.5f, -5f, -0.0001f, 3.6f, 0, 0, 0);
@@ -306,7 +311,7 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		createCube(drawable, labTexture.getTextureWindowLado(), 0.051f, 0.08f, 3.5f, -9f, 1.65f, 3.6f, 0, 0, 0);// Janela
 																												// deitada
 		createCube(drawable, labTexture.getTextureWindowEmPe(), 0.05f, 2f, 0.06f, -9f, 1.1f, 2.7f, 0, 0, 0);// Janela em
-																											// pé
+																											// pï¿½
 		createCube(drawable, labTexture.getTextureWindowEmPe(), 0.05f, 2f, 0.06f, -9f, 1.1f, 3.2f, 0, 0, 0);
 		createCube(drawable, labTexture.getTextureWindowEmPe(), 0.05f, 2f, 0.06f, -9f, 1.1f, 3.7f, 0, 0, 0);
 		createCube(drawable, labTexture.getTextureWindowEmPe(), 0.05f, 2f, 0.06f, -9f, 1.1f, 4.2f, 0, 0, 0);
@@ -347,13 +352,7 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		gl.glEnable(GL2.GL_TEXTURE_2D);
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, texture);
 		gl.glColor3f(1f, 1f, 1f);
-		// gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER,
-		// GL2.GL_LINEAR_MIPMAP_NEAREST);
-		// gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER,
-		// GL2.GL_LINEAR_MIPMAP_LINEAR);
-		// gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_REPEAT);
-		// gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_REPEAT);
-		//
+	
 		gl.glBegin(GL2.GL_QUADS);
 
 		x = -x;
@@ -372,7 +371,6 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		gl.glTexCoord2f(0.0f, 1.0f);
 		gl.glVertex3f(-lenght / 2 + z, height / 2 + y, width / 2 + x);// frente
 																		// cima
-
 		// Right face
 		gl.glTexCoord2f(1.0f, 0.0f);
 		gl.glVertex3f(-lenght / 2 + z, -height / 2 + y, -width / 2 + x);// frente
@@ -385,8 +383,7 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 																		// Cima
 		gl.glTexCoord2f(0.0f, 0.0f);
 		gl.glVertex3f(lenght / 2 + z, -height / 2 + y, -width / 2 + x);// atras
-																		// baixo
-
+																	// baixo
 		// Top Face
 		gl.glTexCoord2f(0.0f, 1.0f);
 		gl.glVertex3f(-lenght / 2 + z, height / 2 + y, -width / 2 + x);// direita
@@ -400,7 +397,6 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		gl.glTexCoord2f(1.0f, 1.0f);
 		gl.glVertex3f(lenght / 2 + z, height / 2 + y, -width / 2 + x);// direita
 																		// baixo
-
 		// Bottom Face
 		gl.glTexCoord2f(1.0f, 1.0f);
 		gl.glVertex3f(-lenght / 2 + z, -height / 2 + y, -width / 2 + x);// direita
@@ -414,7 +410,6 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		gl.glTexCoord2f(1.0f, 0.0f);
 		gl.glVertex3f(-lenght / 2 + z, -height / 2 + y, width / 2 + x);// esquerda
 																		// cima
-
 		// Front face
 		gl.glTexCoord2f(1.0f, 0.0f);
 		gl.glVertex3f(lenght / 2 + z, -height / 2 + y, -width / 2 + x);// direita
@@ -428,7 +423,6 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		gl.glTexCoord2f(0.0f, 0.0f);
 		gl.glVertex3f(lenght / 2 + z, -height / 2 + y, width / 2 + x);// esquerda
 																		// baixo
-
 		// back Face
 		gl.glTexCoord2f(0.0f, 0.0f);
 		gl.glVertex3f(-lenght / 2 + z, -height / 2 + y, -width / 2 + x);// direita
@@ -486,9 +480,9 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		// Apoio
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.18f, 0.03f, -3.77f, 0.48f, 3.21f, 0, 0, 0);
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.18f, 0.03f, -3.77f, 0.326f, 3.365f, 0, 0, 90);
-		// Pés Centro
+		// Pï¿½s Centro
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.08f, 0.03f, -3.77f, 0.23f, 3.52f, 0, 0, 0);
-		// Pés
+		// Pï¿½s
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.025f, 0.125f, 0.025f, -3.77f, 0.15f, 3.42f, 0, 0, 90);
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.025f, 0.125f, 0.025f, -3.65f, 0.15f, 3.49f, 0, 72,
 				90);
@@ -534,9 +528,9 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		// Apoio
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.18f, 0.03f, -5.27f, 0.48f, 4.21f, 0, 0, 0);
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.18f, 0.03f, -5.27f, 0.326f, 4.365f, 0, 0, 90);
-		// Pés Centro
+		// Pï¿½s Centro
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.08f, 0.03f, -5.27f, 0.23f, 4.52f, 0, 0, 0);
-		// Pés
+		// Pï¿½s
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.025f, 0.125f, 0.025f, -5.27f, 0.15f, 4.42f, 0, 0, 90);
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.025f, 0.125f, 0.025f, -5.15f, 0.15f, 4.49f, 0, 72,
 				90);
@@ -582,9 +576,9 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		// Apoio
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.18f, 0.03f, -6.27f, 0.48f, 4.21f, 0, 0, 0);
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.18f, 0.03f, -6.27f, 0.326f, 4.365f, 0, 0, 90);
-		// Pés Centro
+		// Pï¿½s Centro
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.08f, 0.03f, -6.27f, 0.23f, 4.52f, 0, 0, 0);
-		// Pés
+		// Pï¿½s
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.025f, 0.125f, 0.025f, -6.27f, 0.15f, 4.42f, 0, 0, 90);
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.025f, 0.125f, 0.025f, -6.15f, 0.15f, 4.49f, 0, 72,
 				90);
@@ -643,11 +637,9 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 
 		gl.glPopMatrix();
 		gl.glFlush();
-
 	}
 
 	private void createTable(GLAutoDrawable drawable) {
-
 		// mesa lab maior
 		createCube2(drawable, labTexture.getTextureTable(), 5.7f, 0.06f, 1, -6.1f, 0.52f, 4.8f, 0, 0, 0);
 		// mesa apoio
@@ -659,11 +651,9 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		createCube2(drawable, labTexture.getTextureTable(), 1f, 0.06f, 2.6f, -8.5f, 0.519f, 3.2f, 0, 0, 0);
 		// mesa apoio
 		createCube2(drawable, labTexture.getTextureTable(), 1f, 0.45f, 0.1f, -8.5f, 0.27f, 3.3f, 0, 0, 0);
-
 	}
 
 	private void createPcs(GLAutoDrawable drawable) {
-
 		// PC3
 		createCube(drawable, labTexture.getTexturePC(), 0.6f, 0.15f, 0.6f, -6.1f, 0.63f, 4.8f, 0, 0, 0);
 		createCube(drawable, labTexture.getTexturePCCabinet(), 0.59f, 0.149f, 0.049f, -6.1f, 0.63f, 4.5f, 0, 0, 0);
@@ -727,11 +717,9 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		// porta vidro lados
 		createCube(drawable, labTexture.getTextureTable(), 0.10f, 0.5f, 0.07f, -2f, 1.68f, 4.486f, 0, 0, 0);
 		createCube(drawable, labTexture.getTextureTable(), 0.10f, 0.5f, 0.07f, -2f, 1.68f, 5.17f, 0, 0, 0);
-
 	}
 
 	private void createAr(GLAutoDrawable drawable, float width, float height, float lenght, float x, float y, float z) {
-
 		GL2 gl = drawable.getGL().getGL2();
 
 		x = -x;
@@ -882,6 +870,5 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		gl.glEnd(); // cima
 
 		gl.glFlush();
-
 	}
 }
