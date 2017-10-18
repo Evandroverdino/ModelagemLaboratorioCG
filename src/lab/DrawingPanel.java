@@ -118,7 +118,7 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		createHall(drawable);
 		createLab(drawable);
 
-		// Iluminação
+		// Iluminaï¿½ï¿½o
 		init_lighting(gl);
 
 		gl.glFlush();
@@ -225,12 +225,12 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		float especularidade[] = { 1, 1, 1, 1 };
 		int especMaterial = 60;
 
-		// Habilita o uso de iluminação
+		// Habilita o uso de iluminaï¿½ï¿½o
 		gl.glShadeModel(GL2.GL_SMOOTH);
 		gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
-		// Define a refletância do material
+		// Define a refletï¿½ncia do material
 		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, especularidade, 1);
-		// Define a concentração do brilho
+		// Define a concentraï¿½ï¿½o do brilho
 		gl.glMateriali(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, especMaterial);
 		// gl.glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, GL2.GL_TRUE);
 
@@ -306,7 +306,7 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		createCube(drawable, labTexture.getTextureWindowLado(), 0.051f, 0.08f, 3.5f, -9f, 1.65f, 3.6f, 0, 0, 0);// Janela
 																												// deitada
 		createCube(drawable, labTexture.getTextureWindowEmPe(), 0.05f, 2f, 0.06f, -9f, 1.1f, 2.7f, 0, 0, 0);// Janela em
-																											// pé
+																											// pï¿½
 		createCube(drawable, labTexture.getTextureWindowEmPe(), 0.05f, 2f, 0.06f, -9f, 1.1f, 3.2f, 0, 0, 0);
 		createCube(drawable, labTexture.getTextureWindowEmPe(), 0.05f, 2f, 0.06f, -9f, 1.1f, 3.7f, 0, 0, 0);
 		createCube(drawable, labTexture.getTextureWindowEmPe(), 0.05f, 2f, 0.06f, -9f, 1.1f, 4.2f, 0, 0, 0);
@@ -486,9 +486,9 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		// Apoio
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.18f, 0.03f, -3.77f, 0.48f, 3.21f, 0, 0, 0);
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.18f, 0.03f, -3.77f, 0.326f, 3.365f, 0, 0, 90);
-		// Pés Centro
+		// Pï¿½s Centro
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.08f, 0.03f, -3.77f, 0.23f, 3.52f, 0, 0, 0);
-		// Pés
+		// Pï¿½s
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.025f, 0.125f, 0.025f, -3.77f, 0.15f, 3.42f, 0, 0, 90);
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.025f, 0.125f, 0.025f, -3.65f, 0.15f, 3.49f, 0, 72,
 				90);
@@ -534,9 +534,9 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		// Apoio
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.18f, 0.03f, -5.27f, 0.48f, 4.21f, 0, 0, 0);
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.18f, 0.03f, -5.27f, 0.326f, 4.365f, 0, 0, 90);
-		// Pés Centro
+		// Pï¿½s Centro
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.08f, 0.03f, -5.27f, 0.23f, 4.52f, 0, 0, 0);
-		// Pés
+		// Pï¿½s
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.025f, 0.125f, 0.025f, -5.27f, 0.15f, 4.42f, 0, 0, 90);
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.025f, 0.125f, 0.025f, -5.15f, 0.15f, 4.49f, 0, 72,
 				90);
@@ -582,9 +582,9 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		// Apoio
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.18f, 0.03f, -6.27f, 0.48f, 4.21f, 0, 0, 0);
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.18f, 0.03f, -6.27f, 0.326f, 4.365f, 0, 0, 90);
-		// Pés Centro
+		// Pï¿½s Centro
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.03f, 0.08f, 0.03f, -6.27f, 0.23f, 4.52f, 0, 0, 0);
-		// Pés
+		// Pï¿½s
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.025f, 0.125f, 0.025f, -6.27f, 0.15f, 4.42f, 0, 0, 90);
 		createCylinder(drawable, labTexture.getTextureChair2(), 0.025f, 0.125f, 0.025f, -6.15f, 0.15f, 4.49f, 0, 72,
 				90);
