@@ -33,10 +33,19 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 	public void moveCamera() {
 		float[] tmp = polarToCartesian(cameraAzimuth, cameraSpeed, cameraElevation);
 
+		final int cameraCoordsPosx = (int) ((this.cameraCoordsPosx + tmp[0]) * 10);
+		final int cameraCoordsPosy = (int) ((this.cameraCoordsPosy + tmp[1]) * 10);
+		final int cameraCoordsPosz = (int) ((this.cameraCoordsPosz + tmp[2]) * 10);
+		if (cameraCoordsPosx < -86 || cameraCoordsPosx > 85 || cameraCoordsPosy < 3 || cameraCoordsPosy > 18 || cameraCoordsPosz < -5 || cameraCoordsPosz > 86) {
+			return;
+		} else if (cameraCoordsPosz > 16 && (cameraCoordsPosx > -22 || cameraCoordsPosx < -49)) {
+			return;
+		}
+
 		// Replace old x, y, z coords for camera
-		cameraCoordsPosx += tmp[0];
-		cameraCoordsPosy += tmp[1];
-		cameraCoordsPosz += tmp[2];
+		this.cameraCoordsPosx += tmp[0];
+		this.cameraCoordsPosy += tmp[1];
+		this.cameraCoordsPosz += tmp[2];
 	}
 
 	public void aimCamera(GL2 gl, GLU glu) {
@@ -209,7 +218,7 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 			cameraSpeed = 0;
 		}
 	}
-	
+
 	public void loadTextures(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
 		labTexture = new LabTexture(gl);
