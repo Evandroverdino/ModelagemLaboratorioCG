@@ -139,8 +139,8 @@ public class LabTexture {
 
 			texture = TextureIO.newTexture(new File(getClass().getResource("/img/janelaEmPe.png").getPath()), true);
 			textureWindowEmPe = texture.getTextureObject(gl);
-			
-			texture = TextureIO.newTexture(new File(getClass().getResource("/img/integralle.jpg").getPath()), true);
+
+			texture = TextureIO.newTexture(new File(getClass().getResource("/img/glass.jpg").getPath()), true);
 			textureCup = texture.getTextureObject(gl);
 
 		} catch (Exception e) {
