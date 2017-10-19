@@ -240,7 +240,7 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		float luzEspecular[] = { 1.0f, 1.0f, 1.0f, 1.0f };// "brilho"
 		float posicaoLuz[] = { -3.27f, -4f, 7.5f, 1.0f };
 		float especularidade[] = { 10, 10, 10, 10 };
-		int especMaterial = 6000;
+		int especMaterial = 60;
 
 		// Habilita o uso de ilumina��o
 		gl.glShadeModel(GL2.GL_SMOOTH);
@@ -693,8 +693,8 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		// Ar condicionado
 		createAr(drawable, 1.05f, 0.25f, 0.15f, -6.4f, 1.7f, 2f);
 
-		// Copo
-		createCup(drawable, labTexture.getTextureCup(), 0.02f, 0.05f, 0.02f, -4.2f, 0.63f, 4.6f, 0, 0, 0);
+		// taca
+		createCup(drawable, 0.005f, 0.025f, 0.005f, -4.2f, 0.63f, 4.6f, 0, 0, 0);
 	}
 
 	private void createDoor(GLAutoDrawable drawable) {
@@ -874,28 +874,33 @@ public class DrawingPanel implements GLEventListener, KeyListener {
 		gl.glFlush();
 	}
 
-	private void createCup(GLAutoDrawable drawable, int texture, float width, float height, float lenght, float x,
+	private void createCup(GLAutoDrawable drawable, float width, float height, float lenght, float x,
 			float y, float z, float rotateX, float rotateY, float rotateZ) {
 		GL2 gl = drawable.getGL().getGL2();
 
-		gl.glPushMatrix();
-		gl.glBindTexture(GL2.GL_TEXTURE_2D, texture);
-		
-		gl.glTranslatef(-z, y, -x);
-		gl.glRotated(rotateX, 1, 0, 0);
-		gl.glRotated(rotateY, 0, 1, 0);
-		gl.glRotated(rotateZ, 0, 0, 1);
-		gl.glScalef(lenght, height, width);
-		gl.glBegin(GL2.GL_QUAD_STRIP);		
-		for (int j = 0; j <= 360; j += DEF_D) {
-			gl.glTexCoord2f(1f, 0f);
-			gl.glVertex3f((float) (Math.cos(j)), +1, (float) (Math.sin(j)));
-			gl.glTexCoord2f(0.0f, 1.0f);
-			gl.glVertex3f((float) (Math.cos(j)), -1, (float) (Math.sin(j)));
-		}
-		gl.glEnd();
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, labTexture.getTextureCup());
 
+		gl.glPushMatrix();
+		gl.glTranslatef(-4.5f, 0.56f, 4.1f);
+		gl.glRotatef(-90, 1, 0, 0);
+		glut.glutSolidCone(0.05, 0.04, 20, 10);
+		gl.glEnd();
 		gl.glPopMatrix();
+		
+		gl.glPushMatrix();
+		gl.glTranslatef(-4.5f, 0.71f, 4.1f);
+		gl.glRotatef(90, 1, 0, 0);
+		glut.glutSolidCylinder(0.005, 0.12, 20, 20);
+		gl.glEnd();
+		gl.glPopMatrix();
+
+		gl.glPushMatrix();
+		gl.glTranslatef(-4.5f, 0.76f, 4.1f);
+		gl.glRotatef(90, 1, 0, 0);
+		glut.glutSolidCone(0.05, 0.07, 20, 10);
+		gl.glEnd();
+		gl.glPopMatrix();
+		
 		gl.glFlush();
 	}
 
